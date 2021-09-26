@@ -1,4 +1,7 @@
-import kivy
+from kivy.config import Config
+Config.set('graphics', 'resizable', False)
+Config.set('graphics', 'width', '400')
+Config.set('graphics', 'height', '500')
 from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 
