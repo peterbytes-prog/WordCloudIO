@@ -5,7 +5,6 @@ Config.set('graphics', 'height', '500')
 from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 
-
 class WORDCLOUD(AnchorLayout):
     pass
 
