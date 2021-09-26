@@ -1,0 +1,29 @@
+<WORDCLOUD>:
+    test:print('Hello')
+    anchor_x: 'center'
+    anchor_y:'center'
+    GridLayout:
+        cols: 1
+        Label:
+            text:'Word Cloud IO'
+        GridLayout:
+            cols: 1
+            Label:
+                text:'Input File (.txt)'
+            GridLayout:
+                cols: 2
+                TextInput:
+                Button:
+                    text:'Browse'
+        GridLayout:
+            cols: 1
+            Label:
+                text:'Output File Name'
+            GridLayout:
+                cols: 1
+                TextInput:
+        AnchorLayout:
+            anchor_x:'center'
+            anchor_y:'center'
+            Button:
+                text:'Generate'
