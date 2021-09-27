@@ -65,7 +65,9 @@
                         size:self.texture_size
                         padding:('20dp','10dp')
                         on_release:root.Open(_file_choser.path,_file_choser.selection)
-
+<MyLabel>:
+    size_hint:None,None
+    size:self.texture_size
 <WORDCLOUD>:
     anchor_x: 'center'
     anchor_y:'top'
@@ -167,12 +169,31 @@
     ex_word_container:_ex_word_container
     GridLayout:
         cols:1
-        GridLayout:
-            cols:1
-            id:_ex_char_container
-        GridLayout:
-            cols:1
-            id:_ex_word_container
+        ScrollView:
+            canvas:
+                Color:
+                    rgba:(1,1,1,1)
+                Line:
+                    rectangle: (*self.pos,*self.size)
+            GridLayout:
+                cols:1
+                id:_ex_char_container
+                size_hint:1,None
+                height:self.minimum_height
+
+        ScrollView:
+            canvas:
+                Color:
+                    rgba:(1,1,1,1)
+                Line:
+                    rectangle: (*self.pos,*self.size)
+            GridLayout:
+                cols:1
+                id:_ex_word_container
+                size_hint:1,None
+                height:self.minimum_height
+
+
 <AppPages>:
     Screen:
         name: 'mainscreen'

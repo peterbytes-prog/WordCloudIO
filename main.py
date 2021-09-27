@@ -67,6 +67,10 @@ class FileChoosePopUp(Popup):
 class AdvanceSettingButton(ButtonBehavior,Label):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
+class MyLabel(Label):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+    pass
 class SETTINGS(AnchorLayout):
     load = BooleanProperty(False)
     excluded_chars = ListProperty([char for char in '''!()-[]{};:'"\,<>./?@#$%^&*_~'''])
@@ -87,9 +91,11 @@ class SETTINGS(AnchorLayout):
         return
     def on_load(self,*args):
         for word in self.excluded_words:
-            self.ex_word_container.add_widget(Label(text=word))
+            lbl = MyLabel(text=word)
+            self.ex_word_container.add_widget(lbl)
         for char in self.excluded_chars:
-            self.ex_char_container.add_widget(Label(text=char))
+            lbl = MyLabel(text=char)
+            self.ex_char_container.add_widget(lbl)
         return
     def goto(self,name):
         self.app_pager.current = name
