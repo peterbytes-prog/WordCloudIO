@@ -67,8 +67,15 @@ class AdvanceSettingButton(ButtonBehavior,Label):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
 class SETTINGS(AnchorLayout):
+    excluded_chars = ListProperty([char for char in '''!()-[]{};:'"\,<>./?@#$%^&*_~'''])
+    excluded_words = ListProperty(["the", "a", "to", "if", "is", "it", "of", "and", "or", "an", "as", "i", "me", "my", \
+    "we", "our", "ours", "you", "your", "yours", "he", "she", "him", "his", "her", "hers", "its", "they", "them", \
+    "their", "what", "which", "who", "whom", "this", "that", "am", "are", "was", "were", "be", "been", "being", \
+    "have", "has", "had", "do", "does", "did", "but", "at", "by", "with", "from", "here", "when", "where", "how", \
+    "all", "any", "both", "each", "few", "more", "some", "such", "no", "nor", "too", "very", "can", "will", "just"])
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
+        print(self.children)
     def goto(self,name):
         self.app_pager.current = name
         pass

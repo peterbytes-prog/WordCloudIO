@@ -163,11 +163,16 @@
 <SETTINGS>:
     anchor_x:'center'
     anchor_y:'center'
-    Label:
-        text:'This is Settings Page'
-    Button:
-        text:'Back To Main Page'
-        on_release:root.goto('mainscreen')
+    ex_char_container: _ex_char_container
+    ex_word_container:_ex_word_container
+    GridLayout:
+        cols:1
+        GridLayout:
+            cols:1
+            id:_ex_char_container
+        GridLayout:
+            cols:1
+            id:_ex_word_container
 <AppPages>:
     Screen:
         name: 'mainscreen'
