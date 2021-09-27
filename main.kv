@@ -68,6 +68,7 @@
 <MyLabel>:
     size_hint:None,None
     size:self.texture_size
+    padding:('5dp','3dp')
 <WORDCLOUD>:
     anchor_x: 'center'
     anchor_y:'top'
@@ -175,8 +176,8 @@
                     rgba:(1,1,1,1)
                 Line:
                     rectangle: (*self.pos,*self.size)
-            GridLayout:
-                cols:1
+            StackLayout:
+                orientation:'lr-tb'
                 id:_ex_char_container
                 size_hint:1,None
                 height:self.minimum_height
@@ -187,8 +188,8 @@
                     rgba:(1,1,1,1)
                 Line:
                     rectangle: (*self.pos,*self.size)
-            GridLayout:
-                cols:1
+            StackLayout:
+                orientation:'lr-tb'
                 id:_ex_word_container
                 size_hint:1,None
                 height:self.minimum_height
