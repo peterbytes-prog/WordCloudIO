@@ -36,6 +36,7 @@
     test:print('Hello')
     anchor_x: 'center'
     anchor_y:'center'
+    from_file_path_input:_from_file_path_input
     GridLayout:
         cols: 1
         padding: ['7dp','10dp']
@@ -63,6 +64,7 @@
                     TextInput:
                         padding:('7dp',int(self.height*0.30))
                         size_hint:(0.9,1)
+                        id: _from_file_path_input
                 AnchorLayout:
                     anchor_x: 'center'
                     anchor_y:'center'
