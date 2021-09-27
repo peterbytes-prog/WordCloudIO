@@ -4,7 +4,7 @@ Config.set('graphics', 'width', '400')
 Config.set('graphics', 'height', '500')
 from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
-from kivy.properties import StringProperty,ObjectProperty,BooleanProperty
+from kivy.properties import StringProperty,ObjectProperty,BooleanProperty,ListProperty
 from kivy.uix.popup import Popup
 import os
 
@@ -60,12 +60,14 @@ class FileChoosePopUp(Popup):
             self.dismiss()
         else:
             ErrorPopUp(text='Invalid Input File').open()
+            self.ref.from_file_path_input_border = [1,0,0,1]
             pass
         return
     pass
 class WORDCLOUD(AnchorLayout):
     from_file_path = StringProperty('')
     to_path = StringProperty('Untitled.png')
+    from_file_path_input_border = ListProperty([0,0,0,0])
     text = ''
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -92,6 +94,7 @@ class WORDCLOUD(AnchorLayout):
             print(freq)
         else:
             ErrorPopUp(text='Input File (.txt) Field Cannot be empty').open()
+            self.from_file_path_input_border = [1,0,0,1]
             return
         pass
     pass
