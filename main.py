@@ -86,8 +86,10 @@ class SETTINGS(AnchorLayout):
             Clock.unschedule(self.loading_timer)
         return
     def on_load(self,*args):
-        print("Page successfully Loaded")
-        print('Loaded Children: ',self.children)
+        for word in self.excluded_words:
+            self.ex_word_container.add_widget(Label(text=word))
+        for char in self.excluded_chars:
+            self.ex_char_container.add_widget(Label(text=char))
         return
     def goto(self,name):
         self.app_pager.current = name
