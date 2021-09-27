@@ -4,9 +4,11 @@ Config.set('graphics', 'width', '400')
 Config.set('graphics', 'height', '500')
 from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
-from kivy.properties import StringProperty,ObjectProperty
+from kivy.properties import StringProperty,ObjectProperty,BooleanProperty
 from kivy.uix.popup import Popup
 import os
+
+import wordcloud
 
 def generate_freq(text):
     # Here is a list of punctuations and uninteresting words you can use to process your text
@@ -57,6 +59,7 @@ class FileChoosePopUp(Popup):
     pass
 class WORDCLOUD(AnchorLayout):
     from_file_path = StringProperty('')
+    to_path = StringProperty('Untitled.png')
     text = ''
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -65,9 +68,12 @@ class WORDCLOUD(AnchorLayout):
         self.from_file_path_input.text = self.from_file_path
         return
     def generate(self):
+        cloud = wordcloud.WordCloud()
         if self.text:
             freq=generate_freq(self.text)
-            print(freq)
+            img = cloud.generate_from_frequencies(freq)
+            image = img.to_image()
+            image.show()
         else:
             return
         pass
