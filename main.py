@@ -67,13 +67,23 @@ class WORDCLOUD(AnchorLayout):
     def on_from_file_path(self,ins,val):
         self.from_file_path_input.text = self.from_file_path
         return
+    def set_to_path(self,text):
+        self.to_path = text
+        return
     def generate(self):
         cloud = wordcloud.WordCloud()
         if self.text:
             freq=generate_freq(self.text)
             img = cloud.generate_from_frequencies(freq)
             image = img.to_image()
+            if self.to_path:
+                if not self.to_path.endswith('.png'):
+                    self.to_path+='.png'
+            else:
+                self.to_path = 'Untitled.png'
+            image.save(self.to_path)
             image.show()
+            print(freq)
         else:
             return
         pass
