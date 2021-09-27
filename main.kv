@@ -1,3 +1,23 @@
+<FileChoosePopUp>:
+    title:'Select a TextFile'
+    AnchorLayout:
+        anchor_x:'right'
+        anchor_y:'center'
+        size_hint_y:None
+        GridLayout:
+            cols: 2
+            size_hint:None,None
+            size: self.minimum_size
+            Button:
+                text:'cancel'
+                size_hint:None,None
+                size:self.texture_size
+                padding:('20dp','10dp')
+            Button:
+                text:'Open'
+                size_hint:None,None
+                size:self.texture_size
+                padding:('20dp','10dp')
 <WORDCLOUD>:
     test:print('Hello')
     anchor_x: 'center'
