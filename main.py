@@ -8,6 +8,9 @@ from kivy.uix.popup import Popup
 class FileChoosePopUp(Popup):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
+    def Open(self,path,selection):
+        print(path,selection)
+        self.dismiss()
     pass
 class WORDCLOUD(AnchorLayout):
     def __init__(self,*args,**kwargs):
