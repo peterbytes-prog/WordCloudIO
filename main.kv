@@ -69,16 +69,16 @@
 
 
 <WORDCLOUD>:
-    test:print('Hello')
     anchor_x: 'center'
-    anchor_y:'center'
+    anchor_y:'top'
     from_file_path_input:_from_file_path_input
     canvas:
         Color:
-            rgba: (41/255, 43/255, 44/255,1)
+            rgba: (141/255, 143/255, 144/255,1)
         Rectangle:
             size: self.size
             pos:self.pos
+            source:'assets/app_bg.png'
     GridLayout:
         cols: 1
         padding: ['7dp','10dp']
@@ -86,10 +86,10 @@
         size_hint_y:None
         height: self.minimum_height
         Label:
-            text:'Word Cloud IO'
-            font_size:'34dp'
+            text:'[size=100px][color=#5bc0de]Word[/color] [i][color=#292b2c][b]Cloud[/b][/color][/i][/size] [size=110px]IO[/size]'
+            markup: True
             size_hint:1,None
-            size:self.texture_size
+            height:int(root.height*0.3)
         GridLayout:
             cols: 1
             size_hint_y:None

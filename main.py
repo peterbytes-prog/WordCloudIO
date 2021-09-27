@@ -18,8 +18,6 @@ def generate_freq(text):
     "their", "what", "which", "who", "whom", "this", "that", "am", "are", "was", "were", "be", "been", "being", \
     "have", "has", "had", "do", "does", "did", "but", "at", "by", "with", "from", "here", "when", "where", "how", \
     "all", "any", "both", "each", "few", "more", "some", "such", "no", "nor", "too", "very", "can", "will", "just"]
-
-    # LEARNER CODE START HERE
     freq = {}
     cur_wrd = ''
     for char in text:
@@ -39,7 +37,6 @@ def verify_file(file):
         #check if file is txt
         if os.path.splitext(file)[1] == '.txt':
             content = open(file,'r').read()
-    print('content: ',content)
     return content
 class ErrorPopUp(Popup):
     text = StringProperty('')
@@ -52,7 +49,6 @@ class FileChoosePopUp(Popup):
         super().__init__(*args,**kwargs)
 
     def Open(self,path,selection):
-        print(path,selection)
         verified_file = verify_file(selection[0])
         if verified_file:
             self.ref.from_file_path = selection[0]
@@ -91,7 +87,6 @@ class WORDCLOUD(AnchorLayout):
                 self.to_path = 'Untitled.png'
             image.save(self.to_path)
             image.show()
-            print(freq)
         else:
             ErrorPopUp(text='Input File (.txt) Field Cannot be empty').open()
             self.from_file_path_input_border = [1,0,0,1]
