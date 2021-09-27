@@ -41,6 +41,11 @@ def verify_file(file):
             content = open(file,'r').read()
     print('content: ',content)
     return content
+class ErrorPopUp(Popup):
+    text = StringProperty('')
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+    pass
 class FileChoosePopUp(Popup):
     ref = ObjectProperty()
     def __init__(self,*args,**kwargs):
@@ -54,6 +59,7 @@ class FileChoosePopUp(Popup):
             self.ref.text = verified_file
             self.dismiss()
         else:
+            ErrorPopUp(text='Invalid Input File').open()
             pass
         return
     pass
@@ -85,6 +91,7 @@ class WORDCLOUD(AnchorLayout):
             image.show()
             print(freq)
         else:
+            ErrorPopUp(text='Input File (.txt) Field Cannot be empty').open()
             return
         pass
     pass

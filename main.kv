@@ -1,3 +1,39 @@
+<ErrorPopUp>:
+    title:'Error'
+    title_size:'30sp'
+    title_color:(217/255, 83/255, 79/255,1)
+    title_align:'center'
+    separator_color:(240/255, 173/255, 78/255,1)
+    size_hint:0.5,0.5
+    GridLayout:
+        cols: 1
+        GridLayout:
+            cols: 1
+            canvas:
+                Color:
+                    rgba:(247/255,247/255,247/255,1)
+                Rectangle:
+                    size: self.size
+                    pos:self.pos
+            Label:
+                text:root.text
+                color:(217/255, 83/255, 79/255,1)
+                text_size:self.width,None
+                valign:'center'
+                halign:'center'
+        AnchorLayout:
+            anchor_x:'center'
+            anchor_y:'center'
+            size_hint_y:None
+            height:self.children[0].height
+            Button:
+                text:'Close'
+                size_hint:None,None
+                size:self.texture_size
+                padding:('15dp','5dp')
+                on_press:root.dismiss()
+
+
 <FileChoosePopUp>:
     title:'Select a TextFile'
     file_choser:_file_choser
