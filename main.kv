@@ -138,6 +138,14 @@
                     text:'Untitled.png'
                     size_hint:(0.9,1)
                     on_text: root.set_to_path(self.text)
+        AdvanceSettingButton:
+            text:'Advance Settings'
+            text_size:self.size
+            halign:'right'
+            underline:True
+            size_hint:1,None
+            height:self.texture_size[1]
+            on_press:print('press!!')
         AnchorLayout:
             anchor_x:'center'
             anchor_y:'center'

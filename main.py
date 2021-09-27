@@ -6,6 +6,8 @@ from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.properties import StringProperty,ObjectProperty,BooleanProperty,ListProperty
 from kivy.uix.popup import Popup
+from kivy.uix.label import Label
+from kivy.uix.behaviors import ButtonBehavior
 import os
 
 import wordcloud
@@ -60,6 +62,10 @@ class FileChoosePopUp(Popup):
             pass
         return
     pass
+class AdvanceSettingButton(ButtonBehavior,Label):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+
 class WORDCLOUD(AnchorLayout):
     from_file_path = StringProperty('')
     to_path = StringProperty('Untitled.png')
