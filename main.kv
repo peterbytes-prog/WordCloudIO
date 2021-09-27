@@ -33,7 +33,6 @@
                 padding:('15dp','5dp')
                 on_press:root.dismiss()
 
-
 <FileChoosePopUp>:
     title:'Select a TextFile'
     file_choser:_file_choser
@@ -66,7 +65,6 @@
                         size:self.texture_size
                         padding:('20dp','10dp')
                         on_release:root.Open(_file_choser.path,_file_choser.selection)
-
 
 <WORDCLOUD>:
     anchor_x: 'center'
@@ -145,7 +143,7 @@
             underline:True
             size_hint:1,None
             height:self.texture_size[1]
-            on_press:print('press!!')
+            on_press:root.goto('settingscreen')
         AnchorLayout:
             anchor_x:'center'
             anchor_y:'center'
@@ -162,3 +160,20 @@
                         rgba:(1,1,1,1)
                     Line:
                         rectangle: (*self.pos,*self.size)
+<SETTINGS>:
+    anchor_x:'center'
+    anchor_y:'center'
+    Label:
+        text:'This is Settings Page'
+    Button:
+        text:'Back To Main Page'
+        on_release:root.goto('mainscreen')
+<AppPages>:
+    Screen:
+        name: 'mainscreen'
+        WORDCLOUD:
+            app_pager:root
+    Screen:
+        name: 'settingscreen'
+        SETTINGS:
+            app_pager:root

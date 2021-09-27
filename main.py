@@ -8,6 +8,7 @@ from kivy.properties import StringProperty,ObjectProperty,BooleanProperty,ListPr
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.behaviors import ButtonBehavior
+from kivy.uix.screenmanager import ScreenManager, Screen
 import os
 
 import wordcloud
@@ -65,7 +66,12 @@ class FileChoosePopUp(Popup):
 class AdvanceSettingButton(ButtonBehavior,Label):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
-
+class SETTINGS(AnchorLayout):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+    def goto(self,name):
+        self.app_pager.current = name
+        pass
 class WORDCLOUD(AnchorLayout):
     from_file_path = StringProperty('')
     to_path = StringProperty('Untitled.png')
@@ -98,10 +104,17 @@ class WORDCLOUD(AnchorLayout):
             self.from_file_path_input_border = [1,0,0,1]
             return
         pass
+    def goto(self,name):
+        self.app_pager.current = name
     pass
+class AppPages(ScreenManager):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
 
 class MainApp(App):
+    pages = ObjectProperty()
     def build(self):
-        return WORDCLOUD()
+        self.pages = AppPages()
+        return self.pages
 if __name__ == '__main__':
     MainApp().run()
