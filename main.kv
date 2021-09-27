@@ -87,6 +87,7 @@
                 anchor_y:'center'
                 TextInput:
                     padding:('7dp',int(self.height*0.30))
+                    text:'Untitled.png'
                     size_hint:(0.9,1)
         AnchorLayout:
             anchor_x:'center'
@@ -97,3 +98,4 @@
                 text:'Generate'
                 size_hint:0.5,0.5
                 background_color:(0.2,1,0,1)
+                on_release: root.generate()
