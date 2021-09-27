@@ -8,6 +8,7 @@ from kivy.properties import StringProperty,ObjectProperty,BooleanProperty,ListPr
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.behaviors import ButtonBehavior
+from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager, Screen
 import os
 
@@ -67,6 +68,7 @@ class AdvanceSettingButton(ButtonBehavior,Label):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
 class SETTINGS(AnchorLayout):
+    load = BooleanProperty(False)
     excluded_chars = ListProperty([char for char in '''!()-[]{};:'"\,<>./?@#$%^&*_~'''])
     excluded_words = ListProperty(["the", "a", "to", "if", "is", "it", "of", "and", "or", "an", "as", "i", "me", "my", \
     "we", "our", "ours", "you", "your", "yours", "he", "she", "him", "his", "her", "hers", "its", "they", "them", \
@@ -75,7 +77,18 @@ class SETTINGS(AnchorLayout):
     "all", "any", "both", "each", "few", "more", "some", "such", "no", "nor", "too", "very", "can", "will", "just"])
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        print(self.children)
+        self.loading_timer = Clock.schedule_interval(self.loading,0.5);
+        print('Init Children: ',self.children)
+    def loading(self,*args):
+        print('Loading ......')
+        if len(self.children)>0:
+            self.load = True
+            Clock.unschedule(self.loading_timer)
+        return
+    def on_load(self,*args):
+        print("Page successfully Loaded")
+        print('Loaded Children: ',self.children)
+        return
     def goto(self,name):
         self.app_pager.current = name
         pass
