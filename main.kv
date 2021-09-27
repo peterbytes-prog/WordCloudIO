@@ -1,24 +1,34 @@
 <FileChoosePopUp>:
     title:'Select a TextFile'
+    file_choser:_file_choser
     AnchorLayout:
-        anchor_x:'right'
+        anchor_x:'center'
         anchor_y:'center'
-        size_hint_y:None
         GridLayout:
-            cols: 2
-            size_hint:None,None
-            size: self.minimum_size
-            Button:
-                text:'cancel'
-                size_hint:None,None
-                size:self.texture_size
-                padding:('20dp','10dp')
-                on_release: root.dismiss()
-            Button:
-                text:'Open'
-                size_hint:None,None
-                size:self.texture_size
-                padding:('20dp','10dp')
+            cols: 1
+            FileChooserListView:
+                path: './'
+                id:_file_choser
+            AnchorLayout:
+                anchor_x:'right'
+                anchor_y:'center'
+                size_hint_y:None
+                height: self.children[0].height
+                GridLayout:
+                    cols: 2
+                    size_hint:None,None
+                    size: self.minimum_size
+                    Button:
+                        text:'cancel'
+                        size_hint:None,None
+                        size:self.texture_size
+                        padding:('20dp','10dp')
+                        on_release:root.dismiss()
+                    Button:
+                        text:'Open'
+                        size_hint:None,None
+                        size:self.texture_size
+                        padding:('20dp','10dp')
 
 
 <WORDCLOUD>:
