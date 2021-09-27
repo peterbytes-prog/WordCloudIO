@@ -13,11 +13,14 @@
                 size_hint:None,None
                 size:self.texture_size
                 padding:('20dp','10dp')
+                on_release: root.dismiss()
             Button:
                 text:'Open'
                 size_hint:None,None
                 size:self.texture_size
                 padding:('20dp','10dp')
+
+
 <WORDCLOUD>:
     test:print('Hello')
     anchor_x: 'center'
@@ -56,6 +59,7 @@
                     Button:
                         text:'Browse'
                         size_hint:(0.8,1)
+                        on_release: root.file_chooser_popup.open()
 
         GridLayout:
             cols: 1

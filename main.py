@@ -6,12 +6,13 @@ from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.popup import Popup
 class FileChoosePopUp(Popup):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
     pass
 class WORDCLOUD(AnchorLayout):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.file_chooser_popup = FileChoosePopUp()
-        self.file_chooser_popup.open()
     pass
 
 class MainApp(App):
