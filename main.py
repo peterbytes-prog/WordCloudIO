@@ -16,14 +16,14 @@ import os
 
 import wordcloud
 
-def generate_freq(text):
+def generate_freq(text,punctuations,uninteresting_words):
     # Here is a list of punctuations and uninteresting words you can use to process your text
-    punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
-    uninteresting_words = ["the", "a", "to", "if", "is", "it", "of", "and", "or", "an", "as", "i", "me", "my", \
-    "we", "our", "ours", "you", "your", "yours", "he", "she", "him", "his", "her", "hers", "its", "they", "them", \
-    "their", "what", "which", "who", "whom", "this", "that", "am", "are", "was", "were", "be", "been", "being", \
-    "have", "has", "had", "do", "does", "did", "but", "at", "by", "with", "from", "here", "when", "where", "how", \
-    "all", "any", "both", "each", "few", "more", "some", "such", "no", "nor", "too", "very", "can", "will", "just"]
+    # punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
+    # uninteresting_words = ["the", "a", "to", "if", "is", "it", "of", "and", "or", "an", "as", "i", "me", "my", \
+    # "we", "our", "ours", "you", "your", "yours", "he", "she", "him", "his", "her", "hers", "its", "they", "them", \
+    # "their", "what", "which", "who", "whom", "this", "that", "am", "are", "was", "were", "be", "been", "being", \
+    # "have", "has", "had", "do", "does", "did", "but", "at", "by", "with", "from", "here", "when", "where", "how", \
+    # "all", "any", "both", "each", "few", "more", "some", "such", "no", "nor", "too", "very", "can", "will", "just"]
     freq = {}
     cur_wrd = ''
     for char in text:
@@ -116,6 +116,18 @@ class SETTINGS(AnchorLayout):
         lbl = MyLabel(text=text)
         self.ex_word_container.list.add_widget(lbl)
         return
+    def get_excluded_chars(self):
+        rtn = []
+        for char_lbl in self.ex_char_container.list.children:
+            if char_lbl.state == 'normal':
+                rtn.append(char_lbl.text)
+        return rtn
+    def get_excluded_words(self):
+        rtn = []
+        for word_lbl in self.ex_word_container.list.children:
+            if word_lbl.state == 'normal':
+                rtn.append(word_lbl.text)
+        return rtn
     def loading(self,*args):
         print('Loading ......')
         if len(self.children)>0:
@@ -149,8 +161,9 @@ class WORDCLOUD(AnchorLayout):
         return
     def generate(self):
         cloud = wordcloud.WordCloud()
+        setting = self.app_pager.settings_screen_app
         if self.text:
-            freq=generate_freq(self.text)
+            freq=generate_freq(self.text,punctuations=setting.get_excluded_chars(),uninteresting_words=setting.get_excluded_words())
             img = cloud.generate_from_frequencies(freq)
             image = img.to_image()
             if self.to_path:
