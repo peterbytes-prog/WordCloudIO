@@ -80,9 +80,16 @@ class PillList(ScrollView):
         super().__init__(*args,**kwargs)
         pass
 class PillListHeader(GridLayout):
+    textAdder = ObjectProperty()
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         pass
+    def add_item(self,*args):
+        text = self.text_input.text
+        self.text_input.text = ''
+        self.textAdder(text)
+        return
+
 
 class SETTINGS(AnchorLayout):
     load = BooleanProperty(False)
@@ -92,10 +99,23 @@ class SETTINGS(AnchorLayout):
     "their", "what", "which", "who", "whom", "this", "that", "am", "are", "was", "were", "be", "been", "being", \
     "have", "has", "had", "do", "does", "did", "but", "at", "by", "with", "from", "here", "when", "where", "how", \
     "all", "any", "both", "each", "few", "more", "some", "such", "no", "nor", "too", "very", "can", "will", "just"])
+    excluded_words_el = ListProperty()
+    excluded_chars_el = ListProperty()
+
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.loading_timer = Clock.schedule_interval(self.loading,0.5);
         print('Init Children: ',self.children)
+    def add_new_ex_chars(self,text):
+        self.excluded_chars.append(text)
+        lbl = MyLabel(text=text)
+        self.ex_char_container.list.add_widget(lbl)
+        return
+    def add_new_ex_word(self,text):
+        self.excluded_words.append(text)
+        lbl = MyLabel(text=text)
+        self.ex_word_container.list.add_widget(lbl)
+        return
     def loading(self,*args):
         print('Loading ......')
         if len(self.children)>0:
