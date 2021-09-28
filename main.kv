@@ -1,3 +1,54 @@
+<PillList>:
+    list:_list
+    canvas.before:
+        Color:
+            rgba: (100/255, 100/255, 100/255,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+        Color:
+            rgba:(1,1,1,1)
+        Line:
+            rectangle: (*self.pos,*self.size)
+    StackLayout:
+        id:_list
+        orientation:'lr-tb'
+        spacing:('3dp','3dp')
+        padding: ['7dp','10dp']
+        size_hint:1,None
+        height:self.minimum_height
+
+<PillListHeader>:
+    cols: 1
+    size_hint_y:None
+    height:self.minimum_height
+    title: ''
+    Label:
+        size_hint_y:None
+        height:self.texture_size[1]
+        text_size:self.size
+        text:root.title
+        halign:'left'
+        bold:True
+        font_size:'20sp'
+
+    AnchorLayout:
+        anchor_x:'center'
+        anchor_y:'center'
+        size_hint_y:None
+        height: '50dp'
+        GridLayout:
+            cols: 2
+            size_hint:0.7,0.9
+            TextInput:
+                hint_text:'Add Character to remove'
+                padding:('7dp',int(self.height*0.30))
+                size_hint:(0.9,1)
+            Button:
+                text: 'Add'
+                size_hint:None,None
+                size: self.texture_size
+                padding:('10dp','4dp')
 <ErrorPopUp>:
     title:'Error'
     title_size:'30sp'
@@ -179,33 +230,24 @@
     anchor_y:'center'
     ex_char_container: _ex_char_container
     ex_word_container:_ex_word_container
+    canvas:
+        Color:
+            rgba:(41/255, 43/255, 44/255,1)
+        Rectangle:
+            size: self.size
+            pos:self.pos
     GridLayout:
         cols:1
-        ScrollView:
-            canvas:
-                Color:
-                    rgba:(1,1,1,1)
-                Line:
-                    rectangle: (*self.pos,*self.size)
-            StackLayout:
-                orientation:'lr-tb'
-                spacing:('3dp','3dp')
-                id:_ex_char_container
-                size_hint:1,None
-                height:self.minimum_height
-
-        ScrollView:
-            canvas:
-                Color:
-                    rgba:(1,1,1,1)
-                Line:
-                    rectangle: (*self.pos,*self.size)
-            StackLayout:
-                orientation:'lr-tb'
-                spacing:('3dp','3dp')
-                id:_ex_word_container
-                size_hint:1,None
-                height:self.minimum_height
+        padding: ['7dp','10dp']
+        spacing:'10dp'
+        PillListHeader:
+            title:'Removed Characters'
+        PillList:
+            id:_ex_char_container
+        PillListHeader:
+            title:'Removed Words'
+        PillList:
+            id:_ex_word_container
 
 
 <AppPages>:

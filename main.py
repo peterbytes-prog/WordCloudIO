@@ -7,6 +7,8 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.properties import StringProperty,ObjectProperty,BooleanProperty,ListProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.behaviors import ButtonBehavior, ToggleButtonBehavior
 from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -73,6 +75,15 @@ class MyLabel(ToggleButtonBehavior, Label):
     def on_release(self,*args):
         print('press',self.state)
     pass
+class PillList(ScrollView):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        pass
+class PillListHeader(GridLayout):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        pass
+
 class SETTINGS(AnchorLayout):
     load = BooleanProperty(False)
     excluded_chars = ListProperty([char for char in '''!()-[]{};:'"\,<>./?@#$%^&*_~'''])
@@ -94,10 +105,10 @@ class SETTINGS(AnchorLayout):
     def on_load(self,*args):
         for word in self.excluded_words:
             lbl = MyLabel(text=word)
-            self.ex_word_container.add_widget(lbl)
+            self.ex_word_container.list.add_widget(lbl)
         for char in self.excluded_chars:
             lbl = MyLabel(text=char)
-            self.ex_char_container.add_widget(lbl)
+            self.ex_char_container.list.add_widget(lbl)
         return
     def goto(self,name):
         self.app_pager.current = name
