@@ -7,7 +7,7 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.properties import StringProperty,ObjectProperty,BooleanProperty,ListProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
-from kivy.uix.behaviors import ButtonBehavior
+from kivy.uix.behaviors import ButtonBehavior, ToggleButtonBehavior
 from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager, Screen
 import os
@@ -67,9 +67,11 @@ class FileChoosePopUp(Popup):
 class AdvanceSettingButton(ButtonBehavior,Label):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
-class MyLabel(Label):
+class MyLabel(ToggleButtonBehavior, Label):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
+    def on_release(self,*args):
+        print('press',self.state)
     pass
 class SETTINGS(AnchorLayout):
     load = BooleanProperty(False)
