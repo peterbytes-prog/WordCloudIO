@@ -1,6 +1,7 @@
 <SelectShape>:
     anchor_x:'center'
     anchor_y:'center'
+    mask_shape:''
     StackLayout:
         size_hint:None,None
         size: ('300dp','100dp')
@@ -11,6 +12,8 @@
             size: ('100dp','100dp')
             group:'cloud_shape'
             background_color:(1,1,1,0.5)
+            state: 'down' if root.mask_shape=='Circle' else 'normal'
+            on_release: root.change_mask_shape(self,'Circle')
             canvas.before:
                 Color:
                     rgba:(0,0,0,1)
@@ -23,6 +26,8 @@
             size_hint:None,None
             size: ('100dp','100dp')
             background_color:(1,1,1,0.5)
+            state: 'down' if root.mask_shape=='Rectangle' else 'normal'
+            on_release: root.change_mask_shape(self,'Rectangle')
             canvas.before:
                 Color:
                     rgba:(0,0,0,1)
@@ -35,6 +40,8 @@
             size_hint:None,None
             size: ('100dp','100dp')
             background_color:(1,1,1,0.5)
+            state: 'down' if root.mask_shape=='Triangle' else 'normal'
+            on_release: root.change_mask_shape(self,'Triangle')
             canvas.before:
                 Color:
                     rgba:(0,0,0,1)
@@ -52,6 +59,8 @@
     innerslider:_slider
     text:''
     cols: 3
+    size_hint_y: None
+    height:self.minimum_height
     Label:
         text:root.text
         size_hint:None,1
@@ -63,6 +72,8 @@
         step: 1
         value:255
         orientation: 'horizontal'
+        size_hint_y:None
+        height:'30dp'
     Label:
         text:str(int(_slider.value))
         size_hint:None,1
@@ -352,19 +363,24 @@
             anchor_y:'center'
             GridLayout:
                 cols: 1
+                padding:('5dp','5dp')
+                spacing:('4dp','4dp')
                 GridLayout:
                     cols: 1
                     GridLayout:
                         cols: 1
                         size_hint_y:None
-                        height: '60dp'
+                        height:self.minimum_height
                         Label:
                             text:'Word Cloud Mask'
+                            bold:True
                             size_hint:None,None
                             size:self.texture_size
                         AnchorLayout:
                             anchor_x:'center'
                             anchor_y:'center'
+                            size_hint_y:None
+                            height:'50dp'
                             Spinner:
                                 size_hint: 0.9, 0.9
                                 id:_drp
@@ -373,42 +389,121 @@
                                 on_text: root.select_masking(self.text)
                     GridLayout:
                         cols: 1
+                        size_hint_y:None
+                        height:('120dp')
+                        canvas.before:
+                            Color:
+                                rgba:(1,1,1,1)
+                            Line:
+                                points: self.pos[0],self.pos[1],self.size[0],self.pos[1]
                         id:_mask_type_container
                         SelectShape:
-                        
-
-                GridLayout:
-                    cols: 1
+                            mask_shape:root.mask_shape
+                            change_mask_shape:root.change_mask_shape
+                            mask_select:root.mask_select
+                AnchorLayout:
+                    anchor_x:'left'
+                    anchor_y:'center'
                     GridLayout:
                         cols: 1
                         size_hint_y:None
-                        height: '60dp'
+                        height:self.minimum_height
+                        canvas.before:
+                            Color:
+                                rgba:(1,1,1,1)
+                            Line:
+                                points: self.pos[0],self.pos[1],self.size[0],self.pos[1]
+                        GridLayout:
+                            cols: 1
+                            size_hint_y:None
+                            height:self.minimum_height
+                            Label:
+                                text:'Set Background Color'
+                                size_hint:None,None
+                                size:self.texture_size
+                                bold:True
+                            GridLayout:
+                                cols: 2
+                                size_hint_y:None
+                                height:_img_sliders_container.height
+                                GridLayout:
+                                    cols: 1
+                                    size_hint_y:None
+                                    height:self.minimum_height
+                                    id:_img_sliders_container
+                                    ColorSlider:
+                                        text:'R'
+                                        id:_rslider
+                                    ColorSlider:
+                                        text:'G'
+                                        id:_gslider
+                                    ColorSlider:
+                                        text:'B'
+                                        id:_bslider
+                                Widget:
+                                    size_hint:0.7,1
+                                    canvas:
+                                        Color:
+                                            rgba: root.img_bg_color
+                                        Rectangle:
+                                            size: int(self.size[0]*0.6),int(self.size[1]*0.6)
+                                            pos: self.pos[0]+int(self.size[0]*0.2),self.pos[1]+int(self.size[1]*0.2)
+                StackLayout:
+                    orientation:'lr-tb'
+                    size_hint_y:None
+                    height:self.minimum_height
+                    canvas.before:
+                        Color:
+                            rgba:(1,1,1,1)
+                        Line:
+                            points: self.pos[0],self.pos[1],self.size[0],self.pos[1]
+                    Label:
+                        text:'Size'
+                        size_hint:1,None
+                        size:self.texture_size
+                        text_size:self.size
+                        halign:'left'
+                        bold:True
+                    GridLayout:
+                        cols: 2
+                        size_hint:None,None
+                        size:self.minimum_size
                         Label:
-                            text:'Set Background Color'
+                            text:'Width '
                             size_hint:None,None
                             size:self.texture_size
-                        GridLayout:
-                            cols: 2
-                            GridLayout:
-                                cols: 1
-                                ColorSlider:
-                                    text:'R'
-                                    id:_rslider
-                                ColorSlider:
-                                    text:'G'
-                                    id:_gslider
-                                ColorSlider:
-                                    text:'B'
-                                    id:_bslider
-                            Widget:
-                                size_hint:0.7,None
-                                height: '120dp'
-                                canvas:
-                                    Color:
-                                        rgba: root.img_bg_color
-                                    Rectangle:
-                                        size: int(self.size[0]*0.6),int(self.size[1]*0.6)
-                                        pos: self.pos[0]+int(self.size[0]*0.2),self.pos[1]+int(self.size[1]*0.2)
+                        TextInput:
+                            size_hint:None,None
+                            size:('45dp','25dp')
+                    GridLayout:
+                        cols: 2
+                        size_hint:None,None
+                        size:self.minimum_size
+                        Label:
+                            text:'Height '
+                            size_hint:None,None
+                            size:self.texture_size
+                        TextInput:
+                            size_hint:None,None
+                            size:('45dp','25dp')
+
+
+                AnchorLayout:
+                    size_hint_y: None
+                    height: '45dp'
+                    anchor_x:'center'
+                    anchor_y:'center'
+                    Button:
+                        text: 'Apply Changes'
+                        bold:True
+                        size_hint:0.5,0.8
+                        background_color:(1/255,1/255,1/255,1)
+                        on_release: root.goto('mainscreen')
+                        canvas:
+                            Color:
+                                rgba:(1,1,1,1)
+                            Line:
+                                rectangle: (*self.pos,*self.size)
 <AppPages>:
     main_screen_app:_main_screen_app
     settings_screen_app:_settings_screen_app

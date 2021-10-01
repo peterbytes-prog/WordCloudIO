@@ -17,6 +17,7 @@ from kivy.uix.tabbedpanel import TabbedPanel
 import os
 from os import path
 from PIL import Image as PilImage
+from PIL import ImageDraw
 import numpy as np
 import matplotlib.pyplot as plt
 from wordcloud import wordcloud,ImageColorGenerator
@@ -100,12 +101,17 @@ class SelectImage(AnchorLayout):
         super().__init__(*args,**kwargs)
         pass
 class SelectShape(AnchorLayout):
+    mask_shape = StringProperty()
+    change_mask_shape = ObjectProperty()
+    mask_select = StringProperty()
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         pass
 
 class MySETTINGS(TabbedPanel):
+    mask_shape = StringProperty('Circle')
     load = BooleanProperty(False)
+    mask_select = StringProperty('Shape')
     img_bg_color = ListProperty([1,1,1,1])
     excluded_chars = ListProperty([char for char in '''!()-[]{};:'"\,<>./?@#$%^&*_~'''])
     excluded_words = ListProperty(["the", "a", "to", "if", "is", "it", "of", "and", "or", "an", "as", "i", "me", "my", \
@@ -115,7 +121,6 @@ class MySETTINGS(TabbedPanel):
     "all", "any", "both", "each", "few", "more", "some", "such", "no", "nor", "too", "very", "can", "will", "just"])
     excluded_words_el = ListProperty()
     excluded_chars_el = ListProperty()
-
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.loading_timer = Clock.schedule_interval(self.loading,0.5);
@@ -160,12 +165,43 @@ class MySETTINGS(TabbedPanel):
         self.app_pager.current = name
         pass
     def select_masking(self,text):
+        #selecting mask type shape or image template
         self.mask_type_container.clear_widgets()
         if text=='Shape':
             self.mask_type_container.add_widget(SelectShape())
+            self.mask_select = text
         else:
             self.mask_type_container.add_widget(SelectImage())
+            self.mask_select = text
         pass
+    def change_mask_shape(self,ins,shape):
+        #if mask option is a shape set the desire state
+        if shape=='Circle':
+            ins.state = 'down'
+            self.mask_shape = shape
+        elif ins.state=='down':
+            self.mask_shape = shape
+        else:
+            self.mask_shape = 'Circle'
+    def get_mask_shape(self):
+        base_size = (400,200)
+        cnv = PilImage.new("RGBA", base_size, (255,255,255,0))
+        d = ImageDraw.Draw(cnv)
+        min_dim = (min(base_size),min(base_size))
+        pos = ((base_size[0]-min_dim[0])//2,(base_size[1]-min_dim[1])//2)
+        size = pos[0]+min_dim[0],pos[1]+min_dim[1]
+        if self.mask_shape== 'Triangle':
+            pt_1 = (pos[0],size[1])
+            pt_2 = (pos[0]+(min_dim[0]//2),pos[1])
+            pt_3 = size
+            d.polygon([pt_1,pt_2,pt_3],fill=(0,0,0,255))
+        elif self.mask_shape == 'Circle':
+            d.ellipse(pos+size, fill=(0,0,0,255))
+            cnv.show()
+        else:
+            d.rectangle(pos+size, fill=(0,0,0,255))
+        img_arr = np.array(cnv)
+        return img_arr
     pass
 class WORDCLOUD(AnchorLayout):
     from_file_path = StringProperty('')
@@ -182,37 +218,36 @@ class WORDCLOUD(AnchorLayout):
         self.to_path = text
         return
     def generate(self):
-        alice_coloring = np.array(PilImage.open("./assets/alice_coloring.jpeg"))
-        alice_coloring = np.array(PilImage.open("./assets/bg2.jpg"))
-        image_colors = ImageColorGenerator(alice_coloring)
+        # alice_coloring = np.array(PilImage.open("./assets/alice_coloring.jpeg"))
+        # alice_coloring = np.array(PilImage.open("./assets/bg2.jpg"))
+        # image_colors = ImageColorGenerator(alice_coloring)
 
-        cloud = wordcloud.WordCloud(background_color="white",mask=alice_coloring)
         setting = self.app_pager.settings_screen_app
+        cloud = wordcloud.WordCloud(background_color=(int(setting.img_bg_color[0]*255),int(setting.img_bg_color[1]*255),int(setting.img_bg_color[2]*255),100),mask=setting.get_mask_shape())
         if self.text:
             freq=generate_freq(self.text,punctuations=setting.get_excluded_chars(),uninteresting_words=setting.get_excluded_words())
-
             img = cloud.generate_from_frequencies(freq)
-
-
-            fig, axes = plt.subplots(1, 3)
-            axes[0].imshow(img, interpolation="bilinear")
-            # recolor wordcloud and show
-            # we could also give color_func=image_colors directly in the constructor
-            axes[1].imshow(img.recolor(color_func=image_colors), interpolation="bilinear")
-            axes[2].imshow(alice_coloring, cmap=plt.cm.gray, interpolation="bilinear")
-            for ax in axes:
-                ax.set_axis_off()
-            plt.show()
-
-
-            # image = img.to_image()
-            # if self.to_path:
-            #     if not self.to_path.endswith('.png'):
-            #         self.to_path+='.png'
-            # else:
-            #     self.to_path = 'Untitled.png'
-            # image.save(self.to_path)
-            # image.show()
+            # fig, axes = plt.subplots(1, 3)
+            # axes[0].imshow(img, interpolation="bilinear")
+            # # recolor wordcloud and show
+            # # we could also give color_func=image_colors directly in the constructor
+            # axes[1].imshow(img.recolor(color_func=image_colors), interpolation="bilinear")
+            # axes[2].imshow(alice_coloring, cmap=plt.cm.gray, interpolation="bilinear")
+            # for ax in axes:
+            #     ax.set_axis_off()
+            # plt.show()
+            #
+            #
+            # # image = img.to_image()
+            # # if self.to_path:
+            # #     if not self.to_path.endswith('.png'):
+            # #         self.to_path+='.png'
+            # # else:
+            # #     self.to_path = 'Untitled.png'
+            # # image.save(self.to_path)
+            #image.show()
+            image = img.to_image()
+            image.show()
         else:
             ErrorPopUp(text='Input File (.txt) Field Cannot be empty').open()
             self.from_file_path_input_border = [1,0,0,1]
