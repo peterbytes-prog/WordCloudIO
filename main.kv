@@ -1,3 +1,73 @@
+<SelectShape>:
+    anchor_x:'center'
+    anchor_y:'center'
+    StackLayout:
+        size_hint:None,None
+        size: ('300dp','100dp')
+        orientation:'lr-tb'
+        ToggleButton:
+            text:' '
+            size_hint:None,None
+            size: ('100dp','100dp')
+            group:'cloud_shape'
+            background_color:(1,1,1,0.5)
+            canvas.before:
+                Color:
+                    rgba:(0,0,0,1)
+                Ellipse:
+                    size: int(self.size[0]*0.8),int(self.size[1]*0.8)
+                    pos:self.pos[0]+int(self.size[0]*0.1),self.pos[1]+int(self.size[0]*0.1)
+        ToggleButton:
+            text:' '
+            group:'cloud_shape'
+            size_hint:None,None
+            size: ('100dp','100dp')
+            background_color:(1,1,1,0.5)
+            canvas.before:
+                Color:
+                    rgba:(0,0,0,1)
+                Rectangle:
+                    size: int(self.size[0]*0.8),int(self.size[1]*0.8)
+                    pos:self.pos[0]+int(self.size[0]*0.1),self.pos[1]+int(self.size[0]*0.1)
+        ToggleButton:
+            text:' '
+            group:'cloud_shape'
+            size_hint:None,None
+            size: ('100dp','100dp')
+            background_color:(1,1,1,0.5)
+            canvas.before:
+                Color:
+                    rgba:(0,0,0,1)
+                Ellipse:
+                    segments:3
+                    size: int(self.size[0]*0.8),int(self.size[1]*0.8)
+                    pos:self.pos[0]+int(self.size[0]*0.1),self.pos[1]+int(self.size[0]*0.1)
+<SelectImage>:
+    anchor_x:'center'
+    anchor_y:'center'
+    PillListHeader:
+        title:'Select Image File'
+
+<ColorSlider@GridLayout>:
+    innerslider:_slider
+    text:''
+    cols: 3
+    Label:
+        text:root.text
+        size_hint:None,1
+        size:self.texture_size
+    Slider:
+        id: _slider
+        min: 0
+        max: 255
+        step: 1
+        value:255
+        orientation: 'horizontal'
+    Label:
+        text:str(int(_slider.value))
+        size_hint:None,1
+        size:self.texture_size
+
 <PillList>:
     list:_list
     canvas.before:
@@ -228,49 +298,117 @@
                         rgba:(1,1,1,1)
                     Line:
                         rectangle: (*self.pos,*self.size)
-<SETTINGS>:
-    anchor_x:'center'
-    anchor_y:'center'
+<MySETTINGS>:
+    do_default_tab: False
     ex_char_container: _ex_char_container
     ex_word_container:_ex_word_container
-    canvas:
-        Color:
-            rgba:(41/255, 43/255, 44/255,1)
-        Rectangle:
-            size: self.size
-            pos:self.pos
-    GridLayout:
-        cols:1
-        padding: ['7dp','10dp']
-        spacing:'10dp'
-        PillListHeader:
-            title:'Removed Characters'
-            textAdder: root.add_new_ex_chars
-        PillList:
-            id:_ex_char_container
-        PillListHeader:
-            title:'Removed Words'
-            textAdder: root.add_new_ex_word
-        PillList:
-            id:_ex_word_container
+    mask_type_container:_mask_type_container
+    img_bg_color:(_rslider.innerslider.value/255,_gslider.innerslider.value/255,_bslider.innerslider.value/255,1)
+    TabbedPanelItem:
+        text: 'Remove'
         AnchorLayout:
-            size_hint_y: None
-            height: '45dp'
             anchor_x:'center'
             anchor_y:'center'
-            Button:
-                text: 'Apply Changes'
-                bold:True
-                size_hint:0.5,0.8
-                background_color:(1/255,1/255,1/255,1)
-                on_release: root.goto('mainscreen')
-                canvas:
-                    Color:
-                        rgba:(1,1,1,1)
-                    Line:
-                        rectangle: (*self.pos,*self.size)
+            canvas:
+                Color:
+                    rgba:(41/255, 43/255, 44/255,1)
+                Rectangle:
+                    size: self.size
+                    pos:self.pos
+            GridLayout:
+                cols:1
+                padding: ['7dp','10dp']
+                spacing:'10dp'
+                PillListHeader:
+                    title:'Removed Characters'
+                    textAdder: root.add_new_ex_chars
+                PillList:
+                    id:_ex_char_container
+                PillListHeader:
+                    title:'Removed Words'
+                    textAdder: root.add_new_ex_word
+                PillList:
+                    id:_ex_word_container
+                AnchorLayout:
+                    size_hint_y: None
+                    height: '45dp'
+                    anchor_x:'center'
+                    anchor_y:'center'
+                    Button:
+                        text: 'Apply Changes'
+                        bold:True
+                        size_hint:0.5,0.8
+                        background_color:(1/255,1/255,1/255,1)
+                        on_release: root.goto('mainscreen')
+                        canvas:
+                            Color:
+                                rgba:(1,1,1,1)
+                            Line:
+                                rectangle: (*self.pos,*self.size)
+    TabbedPanelItem:
+        text:'Decorations'
+        AnchorLayout:
+            anchor_x:'center'
+            anchor_y:'center'
+            GridLayout:
+                cols: 1
+                GridLayout:
+                    cols: 1
+                    GridLayout:
+                        cols: 1
+                        size_hint_y:None
+                        height: '60dp'
+                        Label:
+                            text:'Word Cloud Mask'
+                            size_hint:None,None
+                            size:self.texture_size
+                        AnchorLayout:
+                            anchor_x:'center'
+                            anchor_y:'center'
+                            Spinner:
+                                size_hint: 0.9, 0.9
+                                id:_drp
+                                text: 'Shape'
+                                values: 'Shape', 'Image'
+                                on_text: root.select_masking(self.text)
+                    GridLayout:
+                        cols: 1
+                        id:_mask_type_container
+                        SelectShape:
+                        
 
-
+                GridLayout:
+                    cols: 1
+                    GridLayout:
+                        cols: 1
+                        size_hint_y:None
+                        height: '60dp'
+                        Label:
+                            text:'Set Background Color'
+                            size_hint:None,None
+                            size:self.texture_size
+                        GridLayout:
+                            cols: 2
+                            GridLayout:
+                                cols: 1
+                                ColorSlider:
+                                    text:'R'
+                                    id:_rslider
+                                ColorSlider:
+                                    text:'G'
+                                    id:_gslider
+                                ColorSlider:
+                                    text:'B'
+                                    id:_bslider
+                            Widget:
+                                size_hint:0.7,None
+                                height: '120dp'
+                                canvas:
+                                    Color:
+                                        rgba: root.img_bg_color
+                                    Rectangle:
+                                        size: int(self.size[0]*0.6),int(self.size[1]*0.6)
+                                        pos: self.pos[0]+int(self.size[0]*0.2),self.pos[1]+int(self.size[1]*0.2)
 <AppPages>:
     main_screen_app:_main_screen_app
     settings_screen_app:_settings_screen_app
@@ -281,6 +419,6 @@
             id:_main_screen_app
     Screen:
         name: 'settingscreen'
-        SETTINGS:
+        MySETTINGS:
             app_pager:root
             id:_settings_screen_app

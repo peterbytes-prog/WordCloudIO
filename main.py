@@ -6,15 +6,20 @@ from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.properties import StringProperty,ObjectProperty,BooleanProperty,ListProperty
 from kivy.uix.popup import Popup
+from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.behaviors import ButtonBehavior, ToggleButtonBehavior
 from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.tabbedpanel import TabbedPanel
 import os
-
-import wordcloud
+from os import path
+from PIL import Image as PilImage
+import numpy as np
+import matplotlib.pyplot as plt
+from wordcloud import wordcloud,ImageColorGenerator
 
 def generate_freq(text,punctuations,uninteresting_words):
     # Here is a list of punctuations and uninteresting words you can use to process your text
@@ -90,9 +95,18 @@ class PillListHeader(GridLayout):
         self.textAdder(text)
         return
 
+class SelectImage(AnchorLayout):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        pass
+class SelectShape(AnchorLayout):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        pass
 
-class SETTINGS(AnchorLayout):
+class MySETTINGS(TabbedPanel):
     load = BooleanProperty(False)
+    img_bg_color = ListProperty([1,1,1,1])
     excluded_chars = ListProperty([char for char in '''!()-[]{};:'"\,<>./?@#$%^&*_~'''])
     excluded_words = ListProperty(["the", "a", "to", "if", "is", "it", "of", "and", "or", "an", "as", "i", "me", "my", \
     "we", "our", "ours", "you", "your", "yours", "he", "she", "him", "his", "her", "hers", "its", "they", "them", \
@@ -145,6 +159,14 @@ class SETTINGS(AnchorLayout):
     def goto(self,name):
         self.app_pager.current = name
         pass
+    def select_masking(self,text):
+        self.mask_type_container.clear_widgets()
+        if text=='Shape':
+            self.mask_type_container.add_widget(SelectShape())
+        else:
+            self.mask_type_container.add_widget(SelectImage())
+        pass
+    pass
 class WORDCLOUD(AnchorLayout):
     from_file_path = StringProperty('')
     to_path = StringProperty('Untitled.png')
@@ -160,19 +182,37 @@ class WORDCLOUD(AnchorLayout):
         self.to_path = text
         return
     def generate(self):
-        cloud = wordcloud.WordCloud()
+        alice_coloring = np.array(PilImage.open("./assets/alice_coloring.jpeg"))
+        alice_coloring = np.array(PilImage.open("./assets/bg2.jpg"))
+        image_colors = ImageColorGenerator(alice_coloring)
+
+        cloud = wordcloud.WordCloud(background_color="white",mask=alice_coloring)
         setting = self.app_pager.settings_screen_app
         if self.text:
             freq=generate_freq(self.text,punctuations=setting.get_excluded_chars(),uninteresting_words=setting.get_excluded_words())
+
             img = cloud.generate_from_frequencies(freq)
-            image = img.to_image()
-            if self.to_path:
-                if not self.to_path.endswith('.png'):
-                    self.to_path+='.png'
-            else:
-                self.to_path = 'Untitled.png'
-            image.save(self.to_path)
-            image.show()
+
+
+            fig, axes = plt.subplots(1, 3)
+            axes[0].imshow(img, interpolation="bilinear")
+            # recolor wordcloud and show
+            # we could also give color_func=image_colors directly in the constructor
+            axes[1].imshow(img.recolor(color_func=image_colors), interpolation="bilinear")
+            axes[2].imshow(alice_coloring, cmap=plt.cm.gray, interpolation="bilinear")
+            for ax in axes:
+                ax.set_axis_off()
+            plt.show()
+
+
+            # image = img.to_image()
+            # if self.to_path:
+            #     if not self.to_path.endswith('.png'):
+            #         self.to_path+='.png'
+            # else:
+            #     self.to_path = 'Untitled.png'
+            # image.save(self.to_path)
+            # image.show()
         else:
             ErrorPopUp(text='Input File (.txt) Field Cannot be empty').open()
             self.from_file_path_input_border = [1,0,0,1]
